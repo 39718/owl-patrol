@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owl Patrol</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bark: #3b2a1a;
+    --moss: #4a5e3a;
+    --sage: #7a8f6a;
+    --straw: #c9a96e;
+    --cream: #f5eeda;
+    --dusk: #1c1810;
+    --feather: #e8dcc8;
+    --amber: #d4822a;
+    --sky-dusk: #2d3a4a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--dusk);
+    color: var(--cream);
+    font-family: 'Lora', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* ── BRAND NAME ── */
+  .brand {
+    font-family: 'Playfair Display', serif;
+    font-style: normal;
+    font-weight: 700;
+    color: inherit;
+  }
+
+
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 60% 30%, #2d3a20 0%, #1c1810 55%, #0d0b07 100%);
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--cream);
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+    opacity: 0;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--bright, 0.6); }
+  }
+
+  /* Moon */
+  .moon {
+    position: absolute;
+    top: 8%; right: 12%;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #f5e9c0, #c9a86a);
+    box-shadow: 0 0 40px 15px rgba(201,168,106,0.25), 0 0 80px 30px rgba(201,168,106,0.1);
+    animation: moonGlow 6s ease-in-out infinite;
+  }
+  @keyframes moonGlow {
+    0%,100% { box-shadow: 0 0 40px 15px rgba(201,168,106,0.25), 0 0 80px 30px rgba(201,168,106,0.1); }
+    50% { box-shadow: 0 0 55px 20px rgba(201,168,106,0.35), 0 0 110px 45px rgba(201,168,106,0.15); }
+  }
+
+  /* Tree silhouette left */
+  .tree-left {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 220px;
+    opacity: 0.85;
+  }
+
+  /* Tree silhouette right */
+  .tree-right {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 180px;
+    opacity: 0.75;
+  }
+
+  /* Ground */
+  .ground {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to top, #0d0b07, transparent);
+  }
+
+  /* Owl SVG */
+  .owl-hero {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: owlFloat 4s ease-in-out infinite;
+  }
+  @keyframes owlFloat {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-12px); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    margin-top: -140px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Lora', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--straw);
+    opacity: 0.85;
+    margin-bottom: 1.2rem;
+    animation: fadeUp 1s ease both 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 14vw, 10rem);
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 60px rgba(201,169,110,0.25), 0 4px 30px rgba(0,0,0,0.6);
+    animation: fadeUp 1s ease both 0.4s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--straw);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--feather);
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 1.5rem auto 0;
+    line-height: 1.7;
+    animation: fadeUp 1s ease both 0.6s;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+    animation: fadeUp 1s ease both 0.8s;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    background: transparent;
+    border: 1.5px solid var(--straw);
+    color: var(--straw);
+    font-family: 'Lora', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+  }
+  .hero-cta:hover {
+    background: var(--straw);
+    color: var(--dusk);
+  }
+
+  .hero-cta-live {
+    background: rgba(74,94,58,0.3);
+    border-color: var(--sage);
+    color: var(--cream);
+  }
+  .hero-cta-live:hover {
+    background: var(--moss);
+    color: var(--cream);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll arrow */
+  .scroll-arrow {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: bounce 2s ease-in-out infinite;
+    cursor: pointer; z-index: 3;
+  }
+  .scroll-arrow span {
+    display: block; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--straw));
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    font-style: normal;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em { color: var(--cream); font-style: normal; }
+
+  .section-body {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--feather);
+    opacity: 0.85;
+    max-width: 640px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,169,110,0.3), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── WHY SECTION ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  @media (max-width: 900px) { .why-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 580px) { .why-grid { grid-template-columns: 1fr; } }
+
+  .why-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 2px;
+    padding: 2rem;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .why-card:hover {
+    border-color: rgba(201,169,110,0.4);
+    background: rgba(255,255,255,0.055);
+  }
+
+  .why-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .why-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+
+  .why-card p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--feather);
+    opacity: 0.8;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    background: linear-gradient(135deg, rgba(74,94,58,0.12) 0%, transparent 60%);
+    border-top: 1px solid rgba(201,169,110,0.1);
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    max-width: 100%;
+    padding: 6rem 2rem;
+  }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+
+  .steps {
+    display: flex;
+    gap: 0;
+    margin-top: 3.5rem;
+    position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 28px; right: 28px;
+    height: 1px;
+    background: linear-gradient(to right, var(--moss), var(--straw), var(--moss));
+    z-index: 0;
+  }
+  @media (max-width: 680px) {
+    .steps { flex-direction: column; gap: 2rem; }
+    .steps::before { display: none; }
+  }
+
+  .step {
+    flex: 1;
+    text-align: center;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-num {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--bark);
+    border: 2px solid var(--straw);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--straw);
+  }
+
+  .step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--feather);
+    opacity: 0.75;
+  }
+
+  /* ── OWL FACTS ── */
+  .facts-section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+  .facts-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+  @media (max-width: 760px) {
+    .facts-layout { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  .fact-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .fact-list li {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .fact-bullet {
+    flex-shrink: 0;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    margin-top: 8px;
+    box-shadow: 0 0 8px rgba(212,130,42,0.5);
+  }
+
+  .fact-list p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--feather);
+    opacity: 0.85;
+  }
+
+  .fact-list strong {
+    color: var(--straw);
+    font-weight: 500;
+  }
+
+  /* Owl portrait */
+  .owl-portrait {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── GET INVOLVED ── */
+  .cta-section {
+    background: radial-gradient(ellipse at 50% 0%, rgba(74,94,58,0.3) 0%, transparent 70%);
+    border-top: 1px solid rgba(201,169,110,0.12);
+    text-align: center;
+    padding: 7rem 2rem;
+  }
+
+  .cta-section .section-title { margin-left: auto; margin-right: auto; }
+  .cta-section .section-body { margin: 0 auto 2.5rem; text-align: center; }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.9rem 2.5rem;
+    background: var(--moss);
+    border: none;
+    color: var(--cream);
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--sage); }
+
+  .btn-outline {
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    border: 1.5px solid rgba(201,169,110,0.4);
+    color: var(--straw);
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--straw); color: var(--cream); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-size: 0.8rem;
+    color: var(--feather);
+    opacity: 0.45;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── FADE-IN ON SCROLL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── ABOUT ME ── */
+  .aboutme-layout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 680px) {
+    .aboutme-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .aboutme-graphic { display: flex; justify-content: center; }
+  }
+
+
+  .video-wrapper { max-width: 800px; }
+
+  .video-frame {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #0d0b07;
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .video-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: var(--feather);
+    opacity: 0.5;
+  }
+
+  .video-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--straw);
+  }
+
+  .video-sub {
+    font-size: 0.8rem;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.6;
+  }
+
+  .video-caption {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    color: var(--feather);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── FEEDBACK FORM ── */
+  .feedback-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  @media (max-width: 760px) { .feedback-layout { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .form-group label {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--straw);
+  }
+
+  .optional { opacity: 0.5; font-size: 0.75rem; text-transform: none; letter-spacing: 0; }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,169,110,0.2);
+    color: var(--cream);
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.25s;
+    resize: vertical;
+    border-radius: 1px;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--feather); opacity: 0.35; }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: rgba(201,169,110,0.55); }
+
+  .form-group select option { background: #1c1810; }
+
+  .submit-btn {
+    padding: 0.85rem 2.2rem;
+    background: var(--moss);
+    border: none;
+    color: var(--cream);
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .submit-btn:hover { background: var(--sage); }
+
+  .form-confirm {
+    display: none;
+    margin-top: 1rem;
+    color: var(--sage);
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Info cards */
+  .feedback-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .info-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,169,110,0.12);
+    padding: 1.6rem;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--cream);
+  }
+
+  .info-card p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--feather);
+    opacity: 0.75;
+  }
+
+  .email-link {
+    color: var(--straw);
+    font-size: 0.95rem;
+    word-break: break-all;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(201,169,110,0.3);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+  .email-link:hover { border-color: var(--straw); }
+
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+
+  <!-- Starfield -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Moon -->
+  <div class="moon"></div>
+
+  <!-- Tree silhouettes -->
+  <svg class="tree-left" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMax meet">
+    <rect x="98" y="200" width="24" height="200" fill="#1a1008"/>
+    <ellipse cx="110" cy="180" rx="75" ry="120" fill="#141a0e"/>
+    <ellipse cx="80" cy="220" rx="55" ry="90" fill="#111609"/>
+    <ellipse cx="145" cy="230" rx="45" ry="80" fill="#0f1408"/>
+    <!-- Box on tree -->
+    <rect x="88" y="115" width="42" height="36" rx="2" fill="#2a1c0d" stroke="#6b4c20" stroke-width="1.5"/>
+    <circle cx="109" cy="127" r="7" fill="#0d0b07" stroke="#6b4c20" stroke-width="1"/>
+    <rect x="107" y="151" width="4" height="10" fill="#2a1c0d"/>
+  </svg>
+
+  <svg class="tree-right" viewBox="0 0 180 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMax meet">
+    <rect x="78" y="180" width="22" height="200" fill="#1a1008"/>
+    <ellipse cx="89" cy="160" rx="65" ry="105" fill="#0f1408"/>
+    <ellipse cx="60" cy="195" rx="48" ry="78" fill="#0d1206"/>
+    <ellipse cx="120" cy="200" rx="40" ry="70" fill="#0b1005"/>
+  </svg>
+
+  <!-- Floating owl -->
+  <div class="owl-hero">
+    <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+      <!-- Wings open slightly -->
+      <ellipse cx="28" cy="85" rx="28" ry="16" fill="#5a4020" transform="rotate(-18,28,85)" opacity="0.9"/>
+      <ellipse cx="112" cy="85" rx="28" ry="16" fill="#5a4020" transform="rotate(18,112,85)" opacity="0.9"/>
+      <!-- Body -->
+      <ellipse cx="70" cy="88" rx="34" ry="42" fill="#7a5c30"/>
+      <!-- Chest pattern -->
+      <ellipse cx="70" cy="95" rx="22" ry="30" fill="#c9a96e" opacity="0.45"/>
+      <ellipse cx="70" cy="108" rx="14" ry="20" fill="#d4b87a" opacity="0.35"/>
+      <!-- Head -->
+      <ellipse cx="70" cy="54" rx="30" ry="28" fill="#7a5c30"/>
+      <!-- Ear tufts -->
+      <polygon points="55,30 48,14 62,26" fill="#5a4020"/>
+      <polygon points="85,30 92,14 78,26" fill="#5a4020"/>
+      <!-- Face disc -->
+      <ellipse cx="70" cy="58" rx="24" ry="22" fill="#c9a96e" opacity="0.5"/>
+      <!-- Eyes -->
+      <circle cx="58" cy="56" r="11" fill="#1a1008"/>
+      <circle cx="82" cy="56" r="11" fill="#1a1008"/>
+      <circle cx="58" cy="56" r="8" fill="#d4a020"/>
+      <circle cx="82" cy="56" r="8" fill="#d4a020"/>
+      <circle cx="58" cy="56" r="5" fill="#0d0b07"/>
+      <circle cx="82" cy="56" r="5" fill="#0d0b07"/>
+      <!-- Eye shine -->
+      <circle cx="60" cy="53" r="2" fill="white" opacity="0.7"/>
+      <circle cx="84" cy="53" r="2" fill="white" opacity="0.7"/>
+      <!-- Beak -->
+      <polygon points="70,63 64,70 76,70" fill="#c9a96e"/>
+      <!-- Talons -->
+      <line x1="56" y1="128" x2="50" y2="138" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="60" y1="129" x2="58" y2="140" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="64" y1="129" x2="66" y2="139" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="80" y1="129" x2="74" y2="139" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="84" y1="129" x2="82" y2="140" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="88" y1="128" x2="92" y2="138" stroke="#5a4020" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="ground"></div>
+
+  <!-- Content -->
+  <div class="hero-content">
+    <p class="hero-eyebrow">A Neighborhood Barn Owl Initiative</p>
+    <h1 class="hero-title">Owl Patrol</h1>
+    <p class="hero-sub">A project dedicated to establishing barn owl nesting sites in residential neighborhoods as a natural, sustainable alternative to anticoagulant rodenticides.</p>
+    <div class="hero-btns">
+      <a href="#about" class="hero-cta">About the Project</a>
+      <a href="#live" class="hero-cta hero-cta-live">&#9654; Live Owl Footage</a>
+      <a href="#feedback" class="hero-cta">Community</a>
+      <a href="#about-me" class="hero-cta">About Me</a>
+    </div>
+  </div>
+
+  <div class="scroll-arrow" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+    <span></span>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+  <p class="section-label reveal">About the Project</p>
+  <h2 class="section-title reveal">Owl Patrol — an overview of the initiative and its objectives.</h2>
+  <p class="section-body reveal">
+    Owl Patrol is a neighborhood-based initiative focused on the construction and installation of nesting boxes designed specifically for the barn owl (<em>Tyto alba</em>). The objective is to provide barn owl families with suitable habitat within residential areas, enabling them to perform their role as natural predators of rodents without the use of chemical intervention.
+  </p>
+  <p class="section-body reveal" style="margin-top:1.2rem;">
+    This project was developed in response to the widespread use of anticoagulant rodenticides in residential settings. These substances are harmful not only to the rodents they target, but to the broader food chain — including raptors, foxes, and domestic animals that consume poisoned prey. Owl Patrol offers a measurable, ecologically sound alternative.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ WHY OWLS ══ -->
+<section id="why">
+  <p class="section-label reveal">Project Benefits</p>
+  <h2 class="section-title reveal">What this project does for the community.</h2>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <span class="why-icon">🦉</span>
+      <h3>Habitat and Food Source for Owls</h3>
+      <p>Natural nesting sites for barn owls — including old barns and hollow trees — are increasingly scarce in residential environments. Installed nest boxes provide a stable habitat for breeding pairs, while the surrounding neighborhood offers an adequate prey base.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">🌿</span>
+      <h3>Support for the Local Ecosystem</h3>
+      <p>The reintroduction of barn owls as active predators within a neighborhood contributes to ecological balance. As apex predators of small mammals, their presence has measurable effects on the broader local food web.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">☠️</span>
+      <h3>Reduction in Rodenticide Use</h3>
+      <p>Anticoagulant rodenticides are among the most ecologically damaging substances in common residential use. The presence of established barn owl families reduces dependence on these compounds as a means of rodent population management.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">🦅</span>
+      <h3>Prevention of Secondary Poisoning</h3>
+      <p>Rodenticides do not remain contained to their intended targets. Predatory animals — including owls, hawks, foxes, and coyotes — that consume poisoned rodents are subject to secondary poisoning. Eliminating rodenticide use interrupts this chain of harm.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">🐾</span>
+      <h3>Reduced Risk to Domestic Animals</h3>
+      <p>Domestic pets are vulnerable to rodenticide exposure through direct contact or the consumption of affected rodents. A neighborhood in which natural predation replaces chemical control presents a substantially lower risk to household animals.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">💡</span>
+      <h3>Low Cost and Low Maintenance</h3>
+      <p>Once a nest box is constructed and installed, ongoing maintenance requirements are minimal. Barn owl pairs are site-faithful and will return to the same box each season, providing continuous, self-sustaining rodent control at no recurring cost.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<div class="how-section" id="how">
+  <div class="how-inner">
+    <p class="section-label reveal">How It Works</p>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Box Construction</h3>
+        <p>Boxes are crafted with the precise interior dimensions required to accommodate a barn owl family, using untreated wood that does not introduce harmful substances into the nesting environment.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Box Installation</h3>
+        <p>Each box is mounted at an appropriate height on a pole or tree, oriented to minimize exposure to prevailing winds and direct sunlight, in accordance with established barn owl nesting guidelines.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Owls Nest</h3>
+        <p>Barn owls independently scout and select suitable nesting locations. A correctly sited box positioned within suitable foraging range will typically attract a nesting pair within the first season.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Hunting Begins</h3>
+        <p>Once a pair has taken up residence, nightly foraging of the surrounding area commences. The pair raises successive clutches within the box and returns to the same site in subsequent seasons.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OWL FACTS ══ -->
+<section class="facts-section" id="facts">
+  <p class="section-label reveal">By the Numbers</p>
+  <h2 class="section-title reveal">What makes barn owls so effective.</h2>
+  <div class="facts-layout">
+    <ul class="fact-list reveal">
+      <li>
+        <div class="fact-bullet"></div>
+        <p>A single barn owl family consumes a minimum of <strong>3,000 rodents per year</strong>, accounting for both the adult pair and their offspring during the nesting season.</p>
+      </li>
+      <li>
+        <div class="fact-bullet"></div>
+        <p>Barn owls are capable of hunting in <strong>near-total darkness</strong>, locating prey exclusively by sound through the use of asymmetrical ear placement and a parabolic facial disc.</p>
+      </li>
+      <li>
+        <div class="fact-bullet"></div>
+        <p>A single clutch typically consists of <strong>4 to 7 owlets</strong>, each of which requires multiple rodents per night to support development through the fledging period.</p>
+      </li>
+      <li>
+        <div class="fact-bullet"></div>
+        <p>Barn owl pairs are <strong>monogamous and highly site-faithful</strong>. Once a nesting box is occupied, the pair will return to the same location in each subsequent breeding season.</p>
+      </li>
+      <li>
+        <div class="fact-bullet"></div>
+        <p>A correctly sited nest box is capable of attracting an occupying pair <strong>within the first season</strong> following installation.</p>
+      </li>
+    </ul>
+
+    <!-- Decorative owl illustration -->
+    <div class="owl-portrait reveal">
+      <svg width="280" height="340" viewBox="0 0 280 340" xmlns="http://www.w3.org/2000/svg">
+        <!-- Moonlit branch -->
+        <rect x="0" y="268" width="280" height="12" rx="6" fill="#3b2a1a"/>
+        <rect x="40" y="262" width="200" height="10" rx="5" fill="#2a1c0d"/>
+        <!-- Body -->
+        <ellipse cx="140" cy="200" rx="58" ry="72" fill="#8a6a38"/>
+        <!-- Wing texture -->
+        <path d="M85,185 Q70,200 80,230 Q90,215 95,200 Z" fill="#6a5028" opacity="0.7"/>
+        <path d="M195,185 Q210,200 200,230 Q190,215 185,200 Z" fill="#6a5028" opacity="0.7"/>
+        <!-- Chest -->
+        <ellipse cx="140" cy="215" rx="38" ry="52" fill="#d4b87a" opacity="0.4"/>
+        <!-- Feather pattern on chest -->
+        <ellipse cx="140" cy="225" rx="28" ry="38" fill="#c9a96e" opacity="0.25"/>
+        <!-- Head -->
+        <ellipse cx="140" cy="116" rx="52" ry="48" fill="#8a6a38"/>
+        <!-- Ear tufts -->
+        <polygon points="113,74 104,50 124,68" fill="#5a4020"/>
+        <polygon points="167,74 176,50 156,68" fill="#5a4020"/>
+        <!-- Face disc -->
+        <path d="M140,150 Q115,140 108,118 Q108,90 140,82 Q172,90 172,118 Q165,140 140,150 Z" fill="#c9a96e" opacity="0.5"/>
+        <!-- Eyes -->
+        <circle cx="122" cy="112" r="19" fill="#1a1008"/>
+        <circle cx="158" cy="112" r="19" fill="#1a1008"/>
+        <circle cx="122" cy="112" r="14" fill="#e0a030"/>
+        <circle cx="158" cy="112" r="14" fill="#e0a030"/>
+        <circle cx="122" cy="112" r="8" fill="#0d0b07"/>
+        <circle cx="158" cy="112" r="8" fill="#0d0b07"/>
+        <circle cx="125" cy="107" r="3.5" fill="white" opacity="0.75"/>
+        <circle cx="161" cy="107" r="3.5" fill="white" opacity="0.75"/>
+        <!-- Beak -->
+        <polygon points="140,124 132,136 148,136" fill="#c9a96e"/>
+        <!-- Talons on branch -->
+        <line x1="118" y1="268" x2="108" y2="280" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <line x1="124" y1="268" x2="118" y2="282" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <line x1="130" y1="268" x2="130" y2="283" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <line x1="150" y1="268" x2="150" y2="283" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <line x1="156" y1="268" x2="162" y2="282" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <line x1="162" y1="268" x2="172" y2="280" stroke="#5a4020" stroke-width="3" stroke-linecap="round"/>
+        <!-- Glow around owl -->
+        <ellipse cx="140" cy="190" rx="80" ry="100" fill="rgba(201,169,110,0.04)" stroke="rgba(201,169,110,0.08)" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ LIVE FOOTAGE ══ -->
+<section id="live">
+  <p class="section-label reveal">Live from the Box</p>
+  <h2 class="section-title reveal">Live footage from an installed Owl Patrol nest box.</h2>
+  <p class="section-body reveal" style="margin-bottom:2.5rem;">
+    A camera has been installed within one of the Owl Patrol nest boxes to provide a direct view of barn owl activity. The footage below documents the owls as they occupy the box, rest, and raise their young — recorded from an active nest site within the neighborhood.
+  </p>
+  <div class="reveal video-wrapper">
+    <div class="video-frame">
+      <div class="video-placeholder">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" stroke="rgba(201,169,110,0.4)" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="8" fill="rgba(201,169,110,0.15)" stroke="rgba(201,169,110,0.5)" stroke-width="1"/>
+          <line x1="32" y1="8" x2="32" y2="18" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="32" y1="46" x2="32" y2="56" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="32" x2="18" y2="32" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="46" y1="32" x2="56" y2="32" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p class="video-label">Live Owl Cam</p>
+        <p class="video-sub">Paste your live stream embed URL or YouTube link below to activate</p>
+        <!-- 
+          TO ADD YOUR LIVE STREAM:
+          Replace this placeholder with an iframe like:
+          <iframe width="100%" height="100%" src="YOUR_YOUTUBE_OR_STREAM_URL" frameborder="0" allowfullscreen></iframe>
+        -->
+      </div>
+    </div>
+    <p class="video-caption">📍 <span class="brand">Owl Patrol</span> Box — installed and monitored in the neighborhood</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ COMMUNITY FEEDBACK ══ -->
+<section id="feedback">
+  <p class="section-label reveal">Community</p>
+  <h2 class="section-title reveal">Questions, observations, and correspondence.</h2>
+  <p class="section-body reveal" style="margin-bottom:2.5rem;">
+    Residents and community members with questions about the project, observations regarding owl activity, or suggestions relevant to its development are welcome to submit a message below. All correspondence is received and reviewed directly by the project coordinator.
+  </p>
+  <div class="feedback-layout reveal">
+    <div class="feedback-form">
+      <div class="form-group">
+        <label for="f-name">Name <span class="optional">(optional)</span></label>
+        <input type="text" id="f-name" placeholder="Your name or a brief identifier">
+      </div>
+      <div class="form-group">
+        <label for="f-type">Nature of correspondence</label>
+        <select id="f-type">
+          <option value="">— Select —</option>
+          <option value="question">Inquiry regarding the project</option>
+          <option value="sighting">Owl sighting report</option>
+          <option value="idea">Suggestion or recommendation</option>
+          <option value="feedback">General correspondence</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="f-msg">Message</label>
+        <textarea id="f-msg" rows="5" placeholder="Please describe your question, observation, or suggestion in as much detail as you find appropriate."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitFeedback()">Submit Message</button>
+      <div class="form-confirm" id="form-confirm">
+        Your message has been submitted. Thank you for your correspondence.
+      </div>
+    </div>
+    <div class="feedback-info">
+      <div class="info-card">
+        <span style="font-size:1.6rem;">📬</span>
+        <h3>Direct Contact</h3>
+        <p>Correspondence may also be directed to the project coordinator by email:</p>
+        <a href="mailto:bilgeokuyucu701@gmail.com" class="email-link">bilgeokuyucu701@gmail.com</a>
+      </div>
+      <div class="info-card">
+        <span style="font-size:1.6rem;">🦉</span>
+        <h3>Owl Sighting Reports</h3>
+        <p>Observations of barn owl activity within the neighborhood — whether near the installed boxes or elsewhere in the area — are of value to this project. Each reported sighting contributes to the ongoing documentation of the initiative's effectiveness.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ ABOUT ME ══ -->
+<section id="about-me">
+  <p class="section-label reveal">About the Project Coordinator</p>
+  <h2 class="section-title reveal">About Me</h2>
+  <div class="aboutme-layout">
+    <div class="aboutme-text reveal">
+      <p class="section-body">
+        My name is Bilge, and I am 13 years old. Owl Patrol began as an extension of work I was doing in science class, where we were studying owls as a means of understanding broader ecological relationships.
+      </p>
+      <p class="section-body" style="margin-top:1.2rem;">
+        During that time, I observed that our yard had a significant number of rodent burrows despite the presence of bait boxes — a chemical approach that was clearly not resolving the problem. Drawing on what I had learned about barn owls and their role as natural predators, I decided to apply that knowledge practically rather than leave it in the classroom.
+      </p>
+      <p class="section-body" style="margin-top:1.2rem;">
+        Owl Patrol is the result of that decision. The project has been in development for several weeks and remains ongoing. My aim is to demonstrate that a sustainable, ecologically informed approach to rodent management is not only viable, but preferable — even at a neighborhood scale.
+      </p>
+    </div>
+    <div class="aboutme-graphic reveal">
+      <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(201,169,110,0.15)" stroke-width="1"/>
+        <circle cx="100" cy="100" r="75" fill="rgba(74,94,58,0.1)" stroke="rgba(201,169,110,0.1)" stroke-width="1"/>
+        <!-- Owl box illustration -->
+        <rect x="72" y="70" width="56" height="70" rx="2" fill="#2a1c0d" stroke="#6b4c20" stroke-width="1.5"/>
+        <circle cx="100" cy="95" r="14" fill="#0d0b07" stroke="#6b4c20" stroke-width="1.5"/>
+        <circle cx="100" cy="95" r="8" fill="#1a1008"/>
+        <!-- Perch -->
+        <rect x="60" y="138" width="80" height="5" rx="2" fill="#3b2a1a"/>
+        <!-- Post -->
+        <rect x="96" y="143" width="8" height="40" fill="#2a1c0d"/>
+        <!-- Small owl peeking out -->
+        <ellipse cx="100" cy="91" rx="9" ry="8" fill="#7a5c30"/>
+        <circle cx="96" cy="89" r="3.5" fill="#e0a030"/>
+        <circle cx="104" cy="89" r="3.5" fill="#e0a030"/>
+        <circle cx="96" cy="89" r="2" fill="#0d0b07"/>
+        <circle cx="104" cy="89" r="2" fill="#0d0b07"/>
+        <circle cx="97" cy="88" r="0.8" fill="white" opacity="0.8"/>
+        <circle cx="105" cy="88" r="0.8" fill="white" opacity="0.8"/>
+        <polygon points="100,93 97,97 103,97" fill="#c9a96e"/>
+        <!-- Glow -->
+        <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="20"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <p>© 2026 <span class="brand">Owl Patrol</span> &nbsp;·&nbsp; A neighborhood barn owl project &nbsp;·&nbsp; <a href="mailto:bilgeokuyucu701@gmail.com" style="color:inherit;opacity:0.7;">bilgeokuyucu701@gmail.com</a></p>
+</footer>
+
+<script>
+  // ── Generate stars ──
+  const starContainer = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --dur:${2+Math.random()*4}s;
+      --delay:${Math.random()*5}s;
+      --bright:${0.3+Math.random()*0.7};
+      width:${Math.random()<0.2?3:2}px;
+      height:${Math.random()<0.2?3:2}px;
+    `;
+    starContainer.appendChild(s);
+  }
+
+  // ── Feedback form ──
+  function submitFeedback() {
+    const msg = document.getElementById('f-msg').value.trim();
+    if (!msg) {
+      document.getElementById('f-msg').focus();
+      return;
+    }
+    const name = document.getElementById('f-name').value.trim() || 'Anonymous';
+    const type = document.getElementById('f-type').value || 'feedback';
+    const subject = encodeURIComponent(`Owl Patrol – ${type} from ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nType: ${type}\n\nMessage:\n${msg}`);
+    window.location.href = `mailto:bilgeokuyucu701@gmail.com?subject=${subject}&body=${body}`;
+    document.getElementById('form-confirm').style.display = 'block';
+    document.getElementById('f-msg').value = '';
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-type').value = '';
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
