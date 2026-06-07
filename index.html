@@ -935,6 +935,8 @@
   </p>
   <div class="reveal video-wrapper">
     <div class="video-frame">
+
+      <!--
       <div class="video-placeholder">
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="32" cy="32" r="30" stroke="rgba(201,169,110,0.4)" stroke-width="1.5"/>
@@ -947,8 +949,26 @@
         <p class="video-label">Live Owl Cam</p>        
         
          <iframe src="https://portal.hdontap.com/s/embed/?stream=nc_wildlife-owl_box-cam-MultiCam-CUST&ratio=16:9&fluid=true" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-        
       </div>
+-->
+      <video id="owlcam" autoplay muted playsinline controls
+  style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+  (function() {
+    var video = document.getElementById('owlcam');
+    var src = 'http://owlpatrol.ddns.net:8888/owl/index.m3u8';
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src;
+    }
+  })();
+</script>
+
+      
     </div>
     <p class="video-caption">📍 <span class="brand">Owl Patrol</span> Box — installed and monitored in the neighborhood</p>
   </div>
