@@ -952,31 +952,23 @@
       </div>
 -->
 <video id="owlcam" autoplay muted playsinline controls
-  style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+  style="width:100%;height:100%;object-fit:cover;display:block;"
+  src="https://minority-why-announces-barrier.trycloudflare.com/owl/index.m3u8">
+</video>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
   (function() {
     var video = document.getElementById('owlcam');
     var src = 'https://minority-why-announces-barrier.trycloudflare.com/owl/index.m3u8';
-
-    function setupHls() {
-      if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource(src);
-        hls.attachMedia(video);
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = src;
-        video.load();
-        video.play();
-      }
+    if (Hls.isSupported()) {
+      video.removeAttribute('src');
+      var hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
     }
-
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
-    script.onload = setupHls;
-    script.onerror = setupHls; // fallback to native if HLS.js fails to load
-    document.head.appendChild(script);
   })();
 </script>
+
  
     </div>
     <p class="video-caption">📍 <span class="brand">Owl Patrol</span> Box — installed and monitored in the neighborhood</p>
